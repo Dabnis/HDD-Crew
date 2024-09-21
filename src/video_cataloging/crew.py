@@ -103,7 +103,7 @@ class VideoCatalogingCrew:
 		return Task(
 			config=self.tasks_config['hydration_task'],
 			tools=[self.get_next_video, self.update_video_list],
-			output_file='validated_titles.md'
+			output_file='output_files/validated_titles.md'
 		)
 
 	@task
@@ -111,7 +111,7 @@ class VideoCatalogingCrew:
 		return Task(
 			config=self.tasks_config['collate_video_list_task'],
 			tools=[self.get_list_summary, self.save_collated],
-			output_file='report.md'
+			output_file='output_files/report.md'
 		)
 
 	@crew
