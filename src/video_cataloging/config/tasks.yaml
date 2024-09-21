@@ -27,7 +27,7 @@ hydration_task:
 collate_video_list_task:
   description: >
     Use the 'Get List Summary Tool' to get a list summary of video title and path values, then collate into groups of: Films; BoxSets; Videos.
-    BoxSets will be grouped by series name, then by each series
+    BoxSets will be grouped by name which will hold ALL seasons, each holding that seasons episodes.
     Use the 'Save Collated Tool' to save your results.
   expected_output: >
     Confirmation that a structured output of groups:Films; BoxSets; Videos populated with the video list index 
