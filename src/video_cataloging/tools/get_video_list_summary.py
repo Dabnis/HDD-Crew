@@ -32,6 +32,6 @@ class GetListSummary(BaseTool):
         list_summary = ""
 
         for index, video in self.video_list:
-            list_summary += f"index:{index}, title:{video.title}, location:{video.path}. "
+            list_summary += f"index:{index}, title:{video.title}, path:{video.path}. "
 
         return list_summary
