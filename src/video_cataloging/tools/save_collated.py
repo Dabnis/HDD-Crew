@@ -45,8 +45,9 @@ class SaveCollated(BaseTool):
     # A reference/pointer to the video list that the crew is working on.
     def __init__(self):
         super().__init__()
+        self.args_schema = SaveCollatedInput
 
-    def _run(self, films: [int], videos: [int], box_sets: List[BoxSet]) -> str:
+    def _run(self, films: List[int], videos: List[int], box_sets: List[BoxSet]) -> str:
         self.collated_list = {
             films: films,
             videos: videos,
