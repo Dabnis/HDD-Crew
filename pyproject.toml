@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "video_cataloging"
+version = "0.1.0"
+description = "video_cataloging using crewAI"
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<=3.13"
+crewai = { version = ">=0.55.2,<1.0.0", extras = ["tools"] }
+pydantic = ">=2.4.2,<3.0.0"
+
+
+[tool.poetry.scripts]
+video_cataloging = "video_cataloging.main:run"
+run_crew = "video_cataloging.main:run"
+train = "video_cataloging.main:train"
+replay = "video_cataloging.main:replay"
+test = "video_cataloging.main:test"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

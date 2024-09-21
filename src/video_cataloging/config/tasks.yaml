@@ -1,0 +1,43 @@
+#research_task:
+#  description: >
+#    Conduct a thorough research about {topic}
+#    Make sure you find any interesting and relevant information given
+#    the current year is 2024.
+#  expected_output: >
+#    A list with 10 bullet points of the most relevant information about {topic}
+#  agent: researcher
+
+collect_video_filenames_task:
+  description: >
+    First, get a list of film and video files from the 'Video Collector' Tool.
+  expected_output: >
+    An acknowledgement of success.
+  agent: film_cataloger
+
+hydration_task:
+  description: >
+    Use the 'Get Next Video Tool', to get each video in the list, then: extrapolate and validate the 'title' value.
+    If you can validate its title  as a Film, or series episode, then hydrate/populate as many of these fields: {video_fields} as you can based on the 
+    title value and the field descriptions. Then Update.
+    If the title can not be validated, DO NOT change.
+  expected_output: >
+    confirmation that all video title fields in the list have been validated and updated, or left as original value.
+  agent: film_cataloger
+
+collate_video_list_task:
+  description: >
+    Use the 'Get List Summary Tool' to get a list summary of video title and path values, then collate into groups of: Films; BoxSets; Videos.
+    BoxSets will be grouped by series name, then by each series
+    Use the 'Save Collated Tool' to save your results.
+  expected_output: >
+    Confirmation that a structured output of groups:Films; BoxSets; Videos populated with the video list index 
+    referencing the list item, has been saved.
+  agent: collation_expert
+
+#hydration_task:
+#  description: >
+#    Using the 'Get Next Video' tool, for each film/video in the list, hydrate these fields based on their description: {video_fields} and the 'title' value.
+#    Update the video list after each field has been hydrated, investigate any errors and retry.
+#  expected_output: >
+#    A list of hydrated objects that describe a film/video.
+#  agent: film_cataloger
