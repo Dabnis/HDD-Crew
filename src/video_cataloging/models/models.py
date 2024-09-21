@@ -24,7 +24,7 @@ class Video(DabnisBaseModel):
     rating: Optional[float] = Field("Unknown", description='IMDB Rating for the video/film')
     genre: Optional[str] = Field("Unknown", description=' Video/film genre')
     year_released: Optional[str] = Field("Unknown", description='The year the video/film was released ')
-    main_actors: Optional[str] = Field([], description='A list of the main 3 actors in video/film')
+    main_actors: Optional[str] = Field([], description='A list of the main 3 actors in video/film. DO NOT hydrate if part of a series/BoxSet')
     summary: Optional[str] = Field("None Available", description='A summary of the video')
 
     # Derived class, call parent init.
