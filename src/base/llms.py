@@ -2,6 +2,8 @@ import os
 from langchain_community.llms import OpenAI, Ollama
 from langchain_openai import ChatOpenAI
 
+os.environ['LITELLM_LOG'] = 'DEBUG'
+
 # v < 0.60.0
 @staticmethod
 class LLMS:
@@ -13,7 +15,7 @@ class LLMS:
         # self.Phi3 = Ollama(model="phi3:mini")
         self.Llama3_1 = Ollama(model="llama3.1")
         self.Phi3 = Ollama(model="phi3:medium-128k")
-        # self.Phi3 = ChatOpenAI(model_name="phi3:medium-128k", temperature=0, api_key="ollama", base_url="http://localhost:11434")
+        self.LLMStudio= ChatOpenAI(temperature=0, base_url="http://localhost:1234")
         # self.groqLama3_8B_3192 = ChatGroq(temperature=0.5, groq_api_key=os.environ.get("GROQ_API_KEY"), model_name="llama3-8b-8192")
 
 # v >= 0.60.0
@@ -43,3 +45,5 @@ class LLMS60:
         self.phi3_medium_128 = 'ollama/phi3:medium-128k'
         self.phi3_latest = 'ollama/phi3:latest'
         self.phi3_14 = 'ollama/phi3:14b'
+        # LLM Studio
+        self.LLMStudio = ChatOpenAI(temperature=0, api_key="LLM Studio", base_url="http://localhost:1234")

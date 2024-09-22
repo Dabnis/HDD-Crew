@@ -37,9 +37,13 @@ class VideoCollector(BaseTool):
             for dir_path, _, files in os.walk(self.root_path):
                 for file in files:
                     if file.lower().endswith(self.vid_extensions):
+                        # Remove extension: .avi, .mkv, etc
                         file_name = os.path.splitext(file)[0]
-                        location = os.path.join(dir_path, file)
-                        vid = Video(title=file_name, location=location)
+                        # Build a full filepath
+                        file_path = os.path.join(dir_path, file_name)
+                        # Remove the root_path from file_path (privacy)
+                        file_path = file_path[len(self.root_path) + 1:]
+                        vid = Video(path=file_path)
                         self.video_list.append(vid)
         except Exception as e:
            return f"{e}"

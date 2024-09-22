@@ -21,6 +21,14 @@ class Season(BaseModel):
 class BoxSet(BaseModel):
     name: str = Field(..., description="The name of the box set")
     seasons: List[Season] = Field(..., description="A list of seasons of a BoxSet")
+    release_year: int = Field(..., description="The year the box set was released")
+    rating: str = Field(..., description="The IMDB rating of the box set")
+    summary: str = Field(..., description="The summary of the box set")
+
+# @dataclass
+# class BoxSet(BaseModel):
+#     name: str = Field(..., description="The name of the box set")
+#     seasons: List[Season] = Field(..., description="A list of seasons of a BoxSet")
 
 class SaveCollatedInput(BaseModel):
     films: List[int] = Field(..., description="A list of film indexes in the video list")

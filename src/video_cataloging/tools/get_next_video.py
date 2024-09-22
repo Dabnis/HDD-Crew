@@ -24,6 +24,8 @@ class GetNextVideo(BaseTool):
     video_list: List[Video] = None
     cursor_idx: int = 0
 
+    input_args: Type[BaseModel] = GetNextIndexInput
+
     # A reference/pointer to the video list that the crew is working on.
     def __init__(self, video_list: List[Video]):
         super().__init__()
@@ -31,6 +33,7 @@ class GetNextVideo(BaseTool):
 
     def _run(self, list_index: int) -> str:
         # Implementation
+        print(f"Cursor Index:{self.cursor_idx}")
         try:
             vid = self.video_list[self.cursor_idx]
             print(f"Retrieving item at index: {self.cursor_idx}")
@@ -46,17 +49,26 @@ class GetNextVideo(BaseTool):
             # Need if details are to be updated in process.
             'list_index': self.cursor_idx,
             'video_details': {
+                'path': vid.path,
                 'title': vid.title,
+                'valid': vid.valid,
+                # 'cat': vid.cat,
                 'rating': vid.rating,
                 'genre': vid.genre,
                 'year_released': vid.year_released,
                 'main_actors': vid.main_actors,
                 'summary': vid.summary,
-
+                'key_moments': vid.key_moments,
             }
         }
+
         # Increment index
         self.cursor_idx += 1
         print(f"Index updated to:{self.cursor_idx}]")
 
-        return json.dumps(resp)
+        try:
+            json_resp = json.dumps(resp)
+        except Exception as e:
+            return f"{e}"
+
+        return json_resp

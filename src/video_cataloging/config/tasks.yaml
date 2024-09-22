@@ -10,29 +10,41 @@
 collect_video_filenames_task:
   description: >
     First, get a list of film and video files from the 'Video Collector' Tool.
+    extrapolate the 'title' value from the 'path' value.
+    Use the 'IMDB Researcher' to validate the title, updating title and valid values when necessary
   expected_output: >
-    An acknowledgement of success.
+    An acknowledgement that the list is loaded and that titles have been validated, valid values updated..
   agent: film_cataloger
 
 hydration_task:
   description: >
-    Use the 'Get Next Video Tool', to get each video in the list, then: extrapolate and validate the 'title' value.
-    If you can validate its title  as a Film, or series episode, then hydrate/populate as many of these fields: {video_fields} as you can based on the 
-    title value and the field descriptions. Then Update.
-    If the title can not be validated, DO NOT change.
+    Use the 'Get Next Video' tool to get each video in the list, for each item: 
+    1: ONLY if the title is valid, use the 'IMDB Researcher' to make a 'single' request to collect enough information to hydrate these fields: {video_fields} 
+    based on the field descriptions and the title;
+    2: Select the cat (category) value from: Film; BoxSet Episode; Misc
+    3: Use the 'Update Video List Tool' to update the video list.
+    Repeat until you reach the end of list.
   expected_output: >
-    confirmation that all video title fields in the list have been validated and updated, or left as original value.
+    A formated list of ALL video items in the list.
   agent: film_cataloger
 
-collate_video_list_task:
-  description: >
-    Use the 'Get List Summary Tool' to get a list summary of video title and path values, then collate into groups of: Films; BoxSets; Videos.
-    BoxSets will be grouped by name which will hold ALL seasons, each holding that seasons episodes.
-    Use the 'Save Collated Tool' to save your results.
-  expected_output: >
-    Confirmation that a structured output of groups:Films; BoxSets; Videos populated with the video list index 
-    referencing the list item, has been saved.
-  agent: collation_expert
+#hydration_task:
+#  description: >
+#    Use the 'Get Next Video' tool hydrate/populate any of these fields: {video_fields}that with missing field values
+#    based on existing populated field values and the field descriptions. Then Update.
+#  expected_output: >
+#    confirmation that all video items in gth elist have been populated..
+#  agent: film_cataloger
+#
+#collate_video_list_task:
+#  description: >
+#    Use the 'Get List Summary Tool' to get a list summary of video title, cat and path values, then collate into groups of: Films; BoxSets; Videos.
+#    BoxSets will be grouped by name which will hold a group of seasons each season being a group of its episodes.
+#    Use the 'Save Collated Tool' to save your results.
+#  expected_output: >
+#    Confirmation that a structured output of groups:Films; BoxSets; Videos populated with the video list index
+#    referencing the list item, has been saved.
+#  agent: collation_expert
 
 #hydration_task:
 #  description: >
