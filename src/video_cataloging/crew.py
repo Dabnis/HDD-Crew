@@ -5,7 +5,7 @@ from crewai_tools import SerperDevTool
 from base.llms import LLMS60
 from src.video_cataloging.tools.get_next_video import GetNextVideo
 from src.video_cataloging.tools.get_video_list_summary import GetListSummary
-from src.video_cataloging.tools.save_collated import SaveCollated
+from src.video_cataloging.tools.save_collated import SaveCollated, SaveCollatedInput
 from src.video_cataloging.tools.update_video_list import UpdateVideoList
 from src.video_cataloging.tools.video_collector import VideoCollector
 
@@ -56,13 +56,13 @@ class VideoCatalogingCrew:
 		self.OnlineSearchTool = SerperDevTool()
 
 	@agent
-	def film_researcher(self) -> Agent:
+	def imdb_researcher(self) -> Agent:
 		return Agent(
-			config=self.agents_config['film_researcher'],
+			config=self.agents_config['imdb_researcher'],
 			# This guy will need to be able to search the internet.
 			tools=[self.OnlineSearchTool],
-			llm=self.llms.GTP4oMini,
-			max_iter=100,
+			llm=self.llms.LLMStudio,
+			max_iter=50,
 			verbose=True
 		)
 
@@ -74,21 +74,21 @@ class VideoCatalogingCrew:
 			# tools=[ self.group_videos],
 			# This guy will need to pass tasks off to other crew members.
 			allow_delegation=True,
-			llm=self.llms.GTP4oMini,
-			max_iter=100,
+			llm=self.llms.LLMStudio,
+			max_iter=50,
 			verbose=True
 		)
 
-	@agent
-	def collation_expert(self) -> Agent:
-		return Agent(
-			config=self.agents_config['collation_expert'],
-			allow_delegation=False,
-			llm=self.llms.GTP4oMini,
-			tools=[self.save_collated],
-			max_iter=100,
-			verbose=True
-		)
+	# @agent
+	# def collation_expert(self) -> Agent:
+	# 	return Agent(
+	# 		config=self.agents_config['collation_expert'],
+	# 		allow_delegation=False,
+	# 		llm=self.llms.GTP4oMini,
+	# 		tools=[self.save_collated],
+	# 		max_iter=25,
+	# 		verbose=True
+	# 	)
 
 	# <<< Tasks >>>
 	@task
@@ -98,21 +98,29 @@ class VideoCatalogingCrew:
 			tools=[self.video_collector],
 		)
 
+	# @task
+	# def validate_film_names_task(self) -> Task:
+	# 	return Task(
+	# 		config=self.tasks_config['validate_film_names_task'],
+	# 		tools=[self.get_next_video, self.update_video_list]
+	# 	)
+
 	@task
 	def hydration_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['hydration_task'],
 			tools=[self.get_next_video, self.update_video_list],
-			output_file='output_files/validated_titles.md'
+			output_file='output_files/hydrated.md'
 		)
 
-	@task
-	def collate_video_list_task(self) -> Task:
-		return Task(
-			config=self.tasks_config['collate_video_list_task'],
-			tools=[self.get_list_summary, self.save_collated],
-			output_file='output_files/report.md'
-		)
+	# @task
+	# def collate_video_list_task(self) -> Task:
+	# 	return Task(
+	# 		config=self.tasks_config['collate_video_list_task'],
+	# 		tools=[self.get_list_summary, self.save_collated],
+	# 		output_pydantic=SaveCollatedInput,
+	# 		output_file='output_files/report.md'
+	# 	)
 
 	@crew
 	def crew(self) -> Crew:
@@ -121,7 +129,9 @@ class VideoCatalogingCrew:
 			agents=self.agents, # Automatically created by the @agent decorator
 			tasks=self.tasks, # Automatically created by the @task decorator
 			process=Process.sequential,
+			# memory=True,
+			# planning=True,
 			verbose=True,
-			manager_llm=self.llms.GTP4oMini,
+			manager_llm=self.llms.LLMStudio
 			# process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
 		)
